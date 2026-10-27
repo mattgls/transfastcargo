@@ -229,6 +229,7 @@ main { padding-top: 82px; }
   width: 140px;
   height: 40px;
   margin: 0 0 16px 0;
+  align-self: flex-start;
   background: url('/green-strokes.png') no-repeat left center;
   background-size: contain;
 }
