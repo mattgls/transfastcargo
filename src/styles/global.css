@@ -222,9 +222,15 @@ main { padding-top: 82px; }
 .section--alt a { color: var(--kargo-black); }
 .section--alt a:hover { color: var(--kargo-lightgrey); }
 
-.section-title {
-  font-size: clamp(32px, 5vw, 50px);
-  margin-bottom: 32px;
+.section-title::before,
+.hero-title::before {
+  content: "";
+  display: block;
+  width: 140px;
+  height: 40px;
+  margin: 0 0 16px 0;
+  background: url('/green-strokes.png') no-repeat left center;
+  background-size: contain;
 }
 
 .prose {
@@ -551,7 +557,7 @@ main { padding-top: 82px; }
 }
 
 /* Address autocomplete */
-.autocomplete { position: relative; }
+.autocomplete input { width: 100%; }
 .suggest {
   position: absolute;
   top: 100%;
