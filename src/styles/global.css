@@ -496,3 +496,20 @@ main { padding-top: 82px; }
   font-size: 24px;
   margin-bottom: 8px;
 }
+
+#map-wrap svg text.commune-label {
+  pointer-events: none;
+  user-select: none;
+}
+
+.map-wrap .commune {
+  fill: #ffffff;
+  stroke: #999999;
+  stroke-width: 0.8;
+  cursor: pointer;
+  transition: fill .15s;
+}
+
+.map-wrap .commune:hover {
+  fill: #d0d0d0;
+}

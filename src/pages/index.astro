@@ -174,12 +174,9 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           'arr16':'16e arrondissement','arr17':'17e arrondissement','arr18':'18e arrondissement',
           'arr19':'19e arrondissement','arr20':'20e arrondissement'
         };
-        const paths = mapWrap.querySelectorAll('.arrondissement');
+        const paths = mapWrap.querySelectorAll('.arrondissement, .commune');
         paths.forEach(function (p) {
-          let name = 'Arrondissement';
-          (p.getAttribute('class') || '').split(/\s+/).forEach(function (c) {
-            if (arrNames[c]) name = arrNames[c];
-          });
+          const name = p.getAttribute('data-name') || 'Zone';
           p.addEventListener('mouseenter', function () {
             tooltip.textContent = name;
             tooltip.style.display = 'block';
@@ -193,57 +190,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           });
         });
 
-        const suburbs = [
-            {name:'Clichy', x:300, y:200},
-            {name:'Levallois-Perret', x:340, y:240},
-            {name:'Neuilly-sur-Seine', x:250, y:285},
-            {name:'Boulogne-Billancourt', x:175, y:485},
-            {name:'Issy-les-Moulineaux', x:240, y:575},
-            {name:'Vanves', x:300, y:600},
-            {name:'Malakoff', x:340, y:635},
-            {name:'Arcueil', x:380, y:660},
-            {name:'Gentilly', x:450, y:675},
-            {name:'Le Kremlin-Bicêtre', x:520, y:660},
-            {name:'Ivry-sur-Seine', x:640, y:585},
-            {name:'Charenton-le-Pont', x:780, y:510},
-            {name:'Saint-Mandé', x:790, y:465},
-            {name:'Vincennes', x:820, y:420},
-            {name:'Montreuil', x:825, y:325},
-            {name:'Les Lilas', x:745, y:235},
-            {name:'Pré-Saint-Gervais', x:715, y:205},
-            {name:'Pantin', x:655, y:180},
-            {name:'Aubervilliers', x:585, y:145},
-            {name:'Saint-Ouen', x:420, y:145}
-        ];
-        const ns = 'http://www.w3.org/2000/svg';
-        const svg = mapWrap.querySelector('svg');
-        if (svg) {
-          const g = document.createElementNS(ns, 'g');
-          g.setAttribute('class', 'suburbs');
-          suburbs.forEach(function (s) {
-            const t = document.createElementNS(ns, 'text');
-            t.setAttribute('x', s.x);
-            t.setAttribute('y', s.y);
-            t.setAttribute('class', 'suburb-label');
-            t.dataset.name = s.name + ' (proche banlieue)';
-            t.textContent = s.name;
-            g.appendChild(t);
-          });
-          svg.appendChild(g);
-          mapWrap.querySelectorAll('.suburb-label').forEach(function (m) {
-            m.addEventListener('mouseenter', function () {
-              tooltip.textContent = m.dataset.name;
-              tooltip.style.display = 'block';
-            });
-            m.addEventListener('mousemove', function (e) {
-              tooltip.style.left = (e.clientX + 14) + 'px';
-              tooltip.style.top = (e.clientY + 14) + 'px';
-            });
-            m.addEventListener('mouseleave', function () {
-              tooltip.style.display = 'none';
-            });
-          });
-        }
+        // Communes and arrondissements already present in SVG; no client labels.
       }
     })();
   </script>
