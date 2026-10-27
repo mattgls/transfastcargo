@@ -513,3 +513,33 @@ main { padding-top: 82px; }
 .map-wrap .commune:hover {
   fill: #d0d0d0;
 }
+
+/* map depth/separation */
+.map-wrap .arrondissement {
+  fill: #e8e8e8 !important;
+  stroke: #6e6e6e !important;
+  stroke-width: 1.2 !important;
+  filter: drop-shadow(1px 1px 0 rgba(255,255,255,0.7)) drop-shadow(-1px -1px 0 rgba(0,0,0,0.15));
+}
+
+.map-wrap .arrondissement:hover {
+  fill: #cfcfcf !important;
+}
+
+.map-wrap .commune {
+  fill: #ffffff !important;
+  stroke: #6e6e6e !important;
+  stroke-width: 1 !important;
+  filter: drop-shadow(1px 1px 0 rgba(255,255,255,0.7)) drop-shadow(-1px -1px 0 rgba(0,0,0,0.15));
+}
+
+.map-wrap .commune:hover {
+  fill: #d0d0d0 !important;
+}
+
+/* Whole map shows a pointer cursor */
+.map-wrap,
+.map-wrap svg,
+.map-wrap svg * {
+  cursor: pointer;
+}
