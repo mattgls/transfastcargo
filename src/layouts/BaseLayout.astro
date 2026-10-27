@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+import fs from 'node:fs';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const siteName = 'TransFastCargo';
+const brandSvg = fs.readFileSync('public/texttransfastcargo-white.svg', 'utf-8').replace(/<\?xml[^>]*\?>/, '').trim();
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{siteName} — {title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="site-header" id="site-header">
+      <nav class="site-nav">
+        <a href="#hero" class="brand">
+          <span class="brand-wordmark" set:html={brandSvg}></span>
+        </a>
+        <button class="menu-toggle" aria-label="Ouvrir le menu" type="button">☰</button>
+        <ul class="nav-links">
+          <li><a href="#mon-histoire">Mon histoire</a></li>
+          <li><a href="#prestations">Prestations</a></li>
+          <li><a href="#zone">Zone</a></li>
+          <li><a href="#tarifs">Tarifs</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>© {new Date().getFullYear()} {siteName}. Tous droits réservés.</p>
+    </footer>
+    <script is:inline>
+      const btn = document.querySelector('.menu-toggle');
+      const nav = document.querySelector('.nav-links');
+      btn?.addEventListener('click', () => nav?.classList.toggle('open'));
+      document.querySelectorAll('.nav-links a').forEach((a) =>
+        a.addEventListener('click', () => nav?.classList.remove('open'))
+      );
+    </script>
+  </body>
+</html>

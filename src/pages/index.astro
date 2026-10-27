@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import fs from 'node:fs';
+
+const sections = await getCollection('sections');
+const histoire = sections.find((s) => s.data.key === 'histoire');
+const prestations = sections.find((s) => s.data.key === 'prestations');
+const tarifs = sections.find((s) => s.data.key === 'tarifs');
+const contact = sections.find((s) => s.data.key === 'contact');
+
+const HistoireContent = histoire ? (await render(histoire)).Content : null;
+const PrestationsContent = prestations ? (await render(prestations)).Content : null;
+const TarifsContent = tarifs ? (await render(tarifs)).Content : null;
+const ContactContent = contact ? (await render(contact)).Content : null;
+
+const galleryImages = Array.from({ length: 21 }, (_, i) => `img-${i + 1}.jpg`).filter((f) => f !== 'img-2.jpg');
+const galleryJson = JSON.stringify(galleryImages.map((f) => `/gallery/${f}`));
+const histoireImage = '/gallery/img-2.jpg';
+
+const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[^>]*\?>/, '').trim();
+---
+<BaseLayout title="Transport & livraison" description="TransFastCargo — transport et livraison rapides.">
+  <section id="hero" class="hero">
+    <div class="hero-inner">
+      <img src="/logo.svg" alt="TransFastCargo" class="hero-logo" />
+      <h1 class="sr-only">TransFastCargo</h1>
+      <img src="/texttransfastcargo.svg" alt="TransFastCargo" class="hero-wordmark" />
+      <p class="hero-sub">Transport &amp; livraison — rapide, fiable, sans détour.</p>
+      <a href="#contact" class="hero-cta">Nous contacter</a>
+    </div>
+  </section>
+
+  <section id="mon-histoire" class="section">
+    <div class="container">
+      <div class="histoire-grid">
+        <div>
+          <h2 class="section-title">{histoire?.data.title ?? 'Mon histoire'}</h2>
+          <div class="prose">
+            {HistoireContent && <HistoireContent />}
+          </div>
+        </div>
+        <img src={histoireImage} alt="Mon histoire" class="histoire-img" />
+      </div>
+    </div>
+  </section>
+
+  <section id="prestations" class="section section--alt">
+    <div class="container">
+      <h2 class="section-title">{prestations?.data.title ?? 'Prestations'}</h2>
+      <div class="prose">
+        {PrestationsContent && <PrestationsContent />}
+      </div>
+      <div class="gallery" id="gallery" data-images={galleryJson}>
+        {galleryImages.map((file, idx) => (
+          <button type="button" class="gallery-item" data-index={idx} aria-label={`Voir la photo ${idx + 1}`}>
+            <img src={`/gallery/${file}`} alt={`Prestation ${idx + 1}`} loading="lazy" />
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button type="button" class="lb-close" aria-label="Fermer">×</button>
+    <button type="button" class="lb-prev" aria-label="Précédente">‹</button>
+    <img src="" alt="Photo" class="lb-img" />
+    <button type="button" class="lb-next" aria-label="Suivante">›</button>
+  </div>
+
+  <section id="tarifs" class="section">
+    <div class="container">
+      <h2 class="section-title">{tarifs?.data.title ?? 'Tarifs'}</h2>
+      <div class="prose">
+        {TarifsContent && <TarifsContent />}
+      </div>
+      <div id="zone">
+        <div class="map-wrap" id="map-wrap">
+          <div class="map-tooltip" id="map-tooltip"></div>
+          <div class="map-svg" set:html={mapSvg}></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section section--alt">
+    <div class="container">
+      <h2 class="section-title">{contact?.data.title ?? 'Contact'}</h2>
+      <div class="prose contact-grid">
+        <div class="contact-text">
+          {ContactContent && <ContactContent />}
+        </div>
+        <form class="contact-form" action="mailto:contact@transfastcargo.fr" method="post" enctype="text/plain">
+          <label>Nom
+            <input type="text" name="nom" required />
+          </label>
+          <label>Email
+            <input type="email" name="email" required />
+          </label>
+          <label>Message
+            <textarea name="message" rows="5" required></textarea>
+          </label>
+          <button type="submit" class="btn">Envoyer</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const bike = document.querySelector('.hero-logo');
+      if (bike) {
+        bike.style.willChange = 'transform';
+        const travel = function () { return Math.min(window.innerWidth * 0.9, 750); };
+        let ticking = false;
+        const update = function () {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+          bike.style.transform = 'translateX(' + (p * travel()) + 'px)';
+        };
+        window.addEventListener('scroll', function () {
+          if (!ticking) {
+            requestAnimationFrame(function () { update(); ticking = false; });
+            ticking = true;
+          }
+        }, { passive: true });
+        update();
+      }
+
+      const galleryEl = document.getElementById('gallery');
+      const lightbox = document.getElementById('lightbox');
+      if (galleryEl && lightbox) {
+        const images = JSON.parse(galleryEl.getAttribute('data-images') || '[]');
+        const lbImg = lightbox.querySelector('.lb-img');
+        let current = 0;
+        const show = function (i) {
+          current = (i + images.length) % images.length;
+          lbImg.setAttribute('src', images[current]);
+          lightbox.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        };
+        const close = function () {
+          lightbox.style.display = 'none';
+          document.body.style.overflow = '';
+        };
+        galleryEl.querySelectorAll('.gallery-item').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            show(parseInt(btn.getAttribute('data-index') || '0', 10));
+          });
+        });
+        lightbox.querySelector('.lb-close').addEventListener('click', close);
+        lightbox.querySelector('.lb-prev').addEventListener('click', function () { show(current - 1); });
+        lightbox.querySelector('.lb-next').addEventListener('click', function () { show(current + 1); });
+        lightbox.addEventListener('click', function (e) {
+          if (e.target === lightbox) close();
+        });
+        window.addEventListener('keydown', function (e) {
+          if (lightbox.style.display !== 'flex') return;
+          if (e.key === 'Escape') close();
+          if (e.key === 'ArrowLeft') show(current - 1);
+          if (e.key === 'ArrowRight') show(current + 1);
+        });
+      }
+
+      const mapWrap = document.getElementById('map-wrap');
+      const tooltip = document.getElementById('map-tooltip');
+      if (mapWrap && tooltip) {
+        const arrNames = {
+          'arr01':'1er arrondissement','arr02':'2e arrondissement','arr03':'3e arrondissement',
+          'arr04':'4e arrondissement','arr05':'5e arrondissement','arr06':'6e arrondissement',
+          'arr07':'7e arrondissement','arr08':'8e arrondissement','arr09':'9e arrondissement',
+          'arr10':'10e arrondissement','arr11':'11e arrondissement','arr12':'12e arrondissement',
+          'arr13':'13e arrondissement','arr14':'14e arrondissement','arr15':'15e arrondissement',
+          'arr16':'16e arrondissement','arr17':'17e arrondissement','arr18':'18e arrondissement',
+          'arr19':'19e arrondissement','arr20':'20e arrondissement'
+        };
+        const paths = mapWrap.querySelectorAll('.arrondissement');
+        paths.forEach(function (p) {
+          let name = 'Arrondissement';
+          (p.getAttribute('class') || '').split(/\s+/).forEach(function (c) {
+            if (arrNames[c]) name = arrNames[c];
+          });
+          p.addEventListener('mouseenter', function () {
+            tooltip.textContent = name;
+            tooltip.style.display = 'block';
+          });
+          p.addEventListener('mousemove', function (e) {
+            tooltip.style.left = (e.clientX + 14) + 'px';
+            tooltip.style.top = (e.clientY + 14) + 'px';
+          });
+          p.addEventListener('mouseleave', function () {
+            tooltip.style.display = 'none';
+          });
+        });
+
+        const suburbs = [
+            {name:'Clichy', x:300, y:200},
+            {name:'Levallois-Perret', x:340, y:240},
+            {name:'Neuilly-sur-Seine', x:250, y:285},
+            {name:'Boulogne-Billancourt', x:175, y:485},
+            {name:'Issy-les-Moulineaux', x:240, y:575},
+            {name:'Vanves', x:300, y:600},
+            {name:'Malakoff', x:340, y:635},
+            {name:'Arcueil', x:380, y:660},
+            {name:'Gentilly', x:450, y:675},
+            {name:'Le Kremlin-Bicêtre', x:520, y:660},
+            {name:'Ivry-sur-Seine', x:640, y:585},
+            {name:'Charenton-le-Pont', x:780, y:510},
+            {name:'Saint-Mandé', x:790, y:465},
+            {name:'Vincennes', x:820, y:420},
+            {name:'Montreuil', x:825, y:325},
+            {name:'Les Lilas', x:745, y:235},
+            {name:'Pré-Saint-Gervais', x:715, y:205},
+            {name:'Pantin', x:655, y:180},
+            {name:'Aubervilliers', x:585, y:145},
+            {name:'Saint-Ouen', x:420, y:145}
+        ];
+        const ns = 'http://www.w3.org/2000/svg';
+        const svg = mapWrap.querySelector('svg');
+        if (svg) {
+          const g = document.createElementNS(ns, 'g');
+          g.setAttribute('class', 'suburbs');
+          suburbs.forEach(function (s) {
+            const t = document.createElementNS(ns, 'text');
+            t.setAttribute('x', s.x);
+            t.setAttribute('y', s.y);
+            t.setAttribute('class', 'suburb-label');
+            t.dataset.name = s.name + ' (proche banlieue)';
+            t.textContent = s.name;
+            g.appendChild(t);
+          });
+          svg.appendChild(g);
+          mapWrap.querySelectorAll('.suburb-label').forEach(function (m) {
+            m.addEventListener('mouseenter', function () {
+              tooltip.textContent = m.dataset.name;
+              tooltip.style.display = 'block';
+            });
+            m.addEventListener('mousemove', function (e) {
+              tooltip.style.left = (e.clientX + 14) + 'px';
+              tooltip.style.top = (e.clientY + 14) + 'px';
+            });
+            m.addEventListener('mouseleave', function () {
+              tooltip.style.display = 'none';
+            });
+          });
+        }
+      }
+    })();
+  </script>
+</BaseLayout>
