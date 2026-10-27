@@ -71,14 +71,40 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
   <section id="tarifs" class="section">
     <div class="container">
       <h2 class="section-title">{tarifs?.data.title ?? 'Tarifs'}</h2>
-      <div class="prose">
-        {TarifsContent && <TarifsContent />}
-      </div>
-      <div id="zone">
-        <div class="map-wrap" id="map-wrap">
-          <div class="map-tooltip" id="map-tooltip"></div>
-          <div class="map-svg" set:html={mapSvg}></div>
+      <div class="tarifs-map-grid">
+        <div class="prose">
+          {TarifsContent && <TarifsContent />}
         </div>
+        <div id="zone">
+          <div class="map-wrap" id="map-wrap">
+            <div class="map-tooltip" id="map-tooltip"></div>
+            <div class="map-svg" set:html={mapSvg}></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="simulateur" class="section">
+    <div class="container">
+      <h2 class="section-title">Simulateur de tarif</h2>
+      <div class="prose">
+        <form class="contact-form sim-form" id="sim-form">
+          <label>Adresse de départ
+            <input type="text" name="depart" required placeholder="Ex : 10 rue de Rivoli, Paris" />
+          </label>
+          <label>Adresse d'arrivée
+            <input type="text" name="arrivee" required placeholder="Ex : Gare de Lyon, Paris" />
+          </label>
+          <label>Volume (m³)
+            <input type="number" name="volume" min="0" step="0.1" value="1" />
+          </label>
+          <label>Poids (kg)
+            <input type="number" name="poids" min="0" step="1" value="10" />
+          </label>
+          <button type="submit" class="btn">Simuler le tarif</button>
+        </form>
+        <div id="sim-result" class="sim-result"></div>
       </div>
     </div>
   </section>
@@ -90,18 +116,6 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
         <div class="contact-text">
           {ContactContent && <ContactContent />}
         </div>
-        <form class="contact-form" action="mailto:contact@transfastcargo.fr" method="post" enctype="text/plain">
-          <label>Nom
-            <input type="text" name="nom" required />
-          </label>
-          <label>Email
-            <input type="email" name="email" required />
-          </label>
-          <label>Message
-            <textarea name="message" rows="5" required></textarea>
-          </label>
-          <button type="submit" class="btn">Envoyer</button>
-        </form>
       </div>
     </div>
   </section>
@@ -192,6 +206,46 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
 
         // Communes and arrondissements already present in SVG; no client labels.
       }
+
+      // Tariff simulator
+      const simForm = document.getElementById('sim-form');
+      const simResult = document.getElementById('sim-result');
+      if (simForm && simResult) {
+        async function geocode(addr) {
+          const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(addr);
+          const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+          const data = await res.json();
+          if (!data || !data.length) throw new Error('Adresse introuvable : ' + addr);
+          return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+        }
+        function haversine(a, b) {
+          const R = 6371;
+          const dLat = (b.lat - a.lat) * Math.PI / 180;
+          const dLon = (b.lon - a.lon) * Math.PI / 180;
+          const lat1 = a.lat * Math.PI / 180;
+          const lat2 = b.lat * Math.PI / 180;
+          const x = Math.sin(dLat / 2) ** 2 + Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+          return 2 * R * Math.asin(Math.sqrt(x));
+        }
+        simForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          simResult.textContent = 'Calcul en cours...';
+          const depart = simForm.depart.value.trim();
+          const arrivee = simForm.arrivee.value.trim();
+          const volume = parseFloat(simForm.volume.value) || 0;
+          const poids = parseFloat(simForm.poids.value) || 0;
+          try {
+            const a = await geocode(depart);
+            const b = await geocode(arrivee);
+            const km = haversine(a, b);
+            const price = Math.max(25, 25 + km * 1.2 + volume * 10 + poids * 0.5);
+            simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif estimé : <strong>' + price.toFixed(2) + ' €</strong>';
+          } catch (err) {
+            simResult.textContent = (err && err.message) ? err.message : 'Erreur lors du calcul.';
+          }
+        });
+      }
+
     })();
   </script>
 </BaseLayout>

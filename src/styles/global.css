@@ -438,7 +438,9 @@ main { padding-top: 82px; }
   border: none;
   background: #fff;
   padding: 8px;
-  max-width: none;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .map-svg svg {
@@ -489,6 +491,10 @@ main { padding-top: 82px; }
   grid-template-columns: 1fr;
   gap: 24px;
   align-items: start;
+}
+
+@media (min-width: 992px) {
+  .tarifs-map-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .map-intro { margin-bottom: 8px; }
