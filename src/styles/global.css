@@ -440,12 +440,12 @@ main { padding-top: 82px; }
 /* Interactive map */
 .map-wrap {
   position: relative;
-  margin-top: 24px;
+  margin: 24px 0 0 0;
   border: none;
   background: #fff;
   padding: 8px;
   max-width: 100%;
-  margin-left: auto;
+  margin-left: 0;
   margin-right: auto;
 }
 
