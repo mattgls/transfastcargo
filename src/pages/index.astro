@@ -91,10 +91,16 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
       <div class="prose">
         <form class="contact-form sim-form" id="sim-form">
           <label>Adresse de départ
-            <input type="text" name="depart" required placeholder="Ex : 10 rue de Rivoli, Paris" />
+            <div class="autocomplete">
+              <input type="text" name="depart" required placeholder="Ex : 10 rue de Rivoli, Paris" autocomplete="off" />
+              <ul class="suggest" data-for="depart"></ul>
+            </div>
           </label>
           <label>Adresse d'arrivée
-            <input type="text" name="arrivee" required placeholder="Ex : Gare de Lyon, Paris" />
+            <div class="autocomplete">
+              <input type="text" name="arrivee" required placeholder="Ex : Gare de Lyon, Paris" autocomplete="off" />
+              <ul class="suggest" data-for="arrivee"></ul>
+            </div>
           </label>
           <label>Volume (m³)
             <input type="number" name="volume" min="0" step="0.1" value="1" />
@@ -245,6 +251,43 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           }
         });
       }
+
+
+      // Address autocomplete (OpenStreetMap / Nominatim)
+      function setupAutocomplete(input) {
+        const list = input.parentElement.querySelector('.suggest');
+        if (!list) return;
+        let timer = null;
+        const hide = function () { list.style.display = 'none'; list.innerHTML = ''; };
+        const search = function (q) {
+          if (timer) clearTimeout(timer);
+          if (!q || q.length < 3) { hide(); return; }
+          timer = setTimeout(async function () {
+            try {
+              const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + encodeURIComponent(q);
+              const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+              const data = await res.json();
+              list.innerHTML = '';
+              if (!data || !data.length) { hide(); return; }
+              data.forEach(function (item) {
+                const li = document.createElement('li');
+                li.textContent = item.display_name;
+                li.addEventListener('click', function () {
+                  input.value = item.display_name;
+                  hide();
+                });
+                list.appendChild(li);
+              });
+              list.style.display = 'block';
+            } catch (e) { hide(); }
+          }, 300);
+        };
+        input.addEventListener('input', function () { search(input.value.trim()); });
+        input.addEventListener('blur', function () { setTimeout(hide, 200); });
+        input.addEventListener('focus', function () { if (input.value.trim().length >= 3) search(input.value.trim()); });
+      }
+      setupAutocomplete(document.querySelector('input[name="depart"]'));
+      setupAutocomplete(document.querySelector('input[name="arrivee"]'));
 
     })();
   </script>

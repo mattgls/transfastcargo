@@ -549,3 +549,30 @@ main { padding-top: 82px; }
 .map-wrap svg * {
   cursor: pointer;
 }
+
+/* Address autocomplete */
+.autocomplete { position: relative; }
+.suggest {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--kargo-white);
+  border: 1px solid var(--kargo-black);
+  max-height: 220px;
+  overflow: auto;
+  display: none;
+  z-index: 50;
+}
+.suggest li {
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.suggest li:hover, .suggest li.active {
+  background: var(--kargo-black);
+  color: var(--kargo-white);
+}
