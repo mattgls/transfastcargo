@@ -120,9 +120,23 @@ a:hover { color: var(--kargo-lightgrey); }
 .nav-links a {
   position: relative;
   color: var(--kargo-white);
+  font-family: "Ethnocentric", system-ui, sans-serif;
 }
 
 .nav-links a:hover { color: var(--terminal-green); }
+
+/* footer ethnocentric */
+.site-footer {
+  font-family: "Ethnocentric", system-ui, sans-serif;
+}
+
+/* buttons ethnocentric */
+button,
+.btn,
+.hero-cta,
+.sim-form button {
+  font-family: "Ethnocentric", system-ui, sans-serif !important;
+}
 
 main { padding-top: 82px; }
 
@@ -180,7 +194,7 @@ main { padding-top: 82px; }
 
 .hero-title {
   font-family: "Ethnocentric", sans-serif;
-  font-size: clamp(40px, 8vw, 96px);
+  font-size: clamp(32px, 6vw, 64px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -200,6 +214,8 @@ main { padding-top: 82px; }
   font-size: clamp(16px, 2.2vw, 24px);
   color: var(--kargo-black);
   margin-bottom: 32px;
+  font-family: "Ethnocentric", system-ui, sans-serif;
+  font-weight: 400;
 }
 
 .hero-cta {
@@ -219,7 +235,7 @@ main { padding-top: 82px; }
 
 /* Sections */
 .section {
-  padding: 96px 0;
+  padding: 64px 0;
   min-height: 60vh;
 }
 
@@ -237,10 +253,15 @@ main { padding-top: 82px; }
   display: block;
   width: 140px;
   height: 40px;
-  margin: 0 0 6px 0;
+  margin: 0 0 2px 0;
   align-self: flex-start;
   background: url('/green-strokes.png') no-repeat left center;
   background-size: contain;
+}
+
+.section-title {
+  font-size: clamp(24px, 3.5vw, 36px);
+  margin: 0 0 40px 0;
 }
 
 .prose {
@@ -327,12 +348,11 @@ main { padding-top: 82px; }
 }
 
 .site-footer {
-  background: var(--kargo-white);
-  color: var(--kargo-black);
+  background: var(--kargo-black);
+  color: var(--kargo-white);
   text-align: center;
   padding: 32px 16px;
   font-size: 14px;
-  border-top: 1px solid var(--kargo-lightgrey);
 }
 
 /* Mobile */
