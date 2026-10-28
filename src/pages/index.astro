@@ -88,6 +88,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
   <section id="simulateur" class="section">
     <div class="container">
       <h2 class="section-title">Simulateur de tarif</h2>
+      <p class="prose">Décrivez votre colis et obtenez une estimation de prix pour votre envoi.</p>
       <div class="prose">
         <form class="contact-form sim-form" id="sim-form">
           <label>Adresse de départ
@@ -108,7 +109,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           <label>Dimensions (largeur*longueur*profondeur)
             <input type="text" name="dimensions" placeholder="ex: 120*80*60 cm" />
           </label>
-          <label>Description du produit à livrer
+          <label>Description
             <textarea name="description" rows="3" placeholder="Décrivez le colis..."></textarea>
           </label>
           <button type="submit" class="btn">Simuler le tarif</button>
