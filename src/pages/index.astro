@@ -102,11 +102,14 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
               <ul class="suggest" data-for="arrivee"></ul>
             </div>
           </label>
-          <label>Volume (m³)
-            <input type="number" name="volume" min="0" step="0.1" value="1" />
-          </label>
           <label>Poids (kg)
             <input type="number" name="poids" min="0" step="1" value="10" />
+          </label>
+          <label>Dimensions (largeur*longueur*profondeur)
+            <input type="text" name="dimensions" placeholder="ex: 120*80*60 cm" />
+          </label>
+          <label>Description du produit à livrer
+            <textarea name="description" rows="3" placeholder="Décrivez le colis..."></textarea>
           </label>
           <button type="submit" class="btn">Simuler le tarif</button>
         </form>
@@ -239,13 +242,12 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           simResult.textContent = 'Calcul en cours...';
           const depart = simForm.depart.value.trim();
           const arrivee = simForm.arrivee.value.trim();
-          const volume = parseFloat(simForm.volume.value) || 0;
           const poids = parseFloat(simForm.poids.value) || 0;
           try {
             const a = await geocode(depart);
             const b = await geocode(arrivee);
             const km = haversine(a, b);
-            const price = Math.max(25, 25 + km * 1.2 + volume * 10 + poids * 0.5);
+            const price = Math.max(25, 25 + km * 1.2 + poids * 0.5);
             simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif estimé : <strong>' + price.toFixed(2) + ' €</strong>';
           } catch (err) {
             simResult.textContent = (err && err.message) ? err.message : 'Erreur lors du calcul.';
@@ -281,7 +283,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
                   suppressInput = true;
                   input.value = label;
                   hide();
-                  setTimeout(function () { suppressInput = false; }, 0);
+                  setTimeout(function () { suppressInput = false; }, 400);
                 });
                 list.appendChild(li);
               });
@@ -291,7 +293,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
         };
         input.addEventListener('input', function () { if (suppressInput) return; search(input.value.trim()); });
         input.addEventListener('blur', function () { setTimeout(hide, 200); });
-        input.addEventListener('focus', function () { if (input.value.trim().length >= 2) search(input.value.trim()); });
+        input.addEventListener('focus', function () { if (suppressInput) return; if (input.value.trim().length >= 2) search(input.value.trim()); });
       }
       setupAutocomplete(document.querySelector('input[name="depart"]'));
       setupAutocomplete(document.querySelector('input[name="arrivee"]'));
