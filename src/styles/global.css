@@ -6,6 +6,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --kargo-black: #111111;
   --kargo-white: #fefefe;
@@ -24,7 +32,8 @@ html {
 
 body {
   margin: 0;
-  font-family: "Ethnocentric", system-ui, -apple-system, sans-serif;
+  font-family: "Orbitron", system-ui, -apple-system, sans-serif;
+  font-weight: 300;
   background: var(--kargo-white);
   color: var(--kargo-black);
   line-height: 1.6;
@@ -228,7 +237,7 @@ main { padding-top: 82px; }
   display: block;
   width: 140px;
   height: 40px;
-  margin: 0 0 16px 0;
+  margin: 0 0 6px 0;
   align-self: flex-start;
   background: url('/green-strokes.png') no-repeat left center;
   background-size: contain;
