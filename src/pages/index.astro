@@ -218,11 +218,12 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
       const simResult = document.getElementById('sim-result');
       if (simForm && simResult) {
         async function geocode(addr) {
-          const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(addr);
+          const url = 'https://photon.komoot.io/api/?q=' + encodeURIComponent(addr) + '&limit=1';
           const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
           const data = await res.json();
-          if (!data || !data.length) throw new Error('Adresse introuvable : ' + addr);
-          return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+          if (!data || !data.features || !data.features.length) throw new Error('Adresse introuvable : ' + addr);
+          const coord = data.features[0].geometry.coordinates;
+          return { lat: parseFloat(coord[1]), lon: parseFloat(coord[0]) };
         }
         function haversine(a, b) {
           const R = 6371;
@@ -264,16 +265,19 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           if (!q || q.length < 3) { hide(); return; }
           timer = setTimeout(async function () {
             try {
-              const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + encodeURIComponent(q);
+              const url = 'https://photon.komoot.io/api/?q=' + encodeURIComponent(q) + '&limit=5';
               const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
               const data = await res.json();
+              const features = (data && data.features) ? data.features : [];
               list.innerHTML = '';
-              if (!data || !data.length) { hide(); return; }
-              data.forEach(function (item) {
+              if (!features.length) { hide(); return; }
+              features.forEach(function (item) {
+                const props = item.properties || {};
+                const label = [props.name, props.city, props.state, props.country].filter(Boolean).join(', ') || 'Lieu';
                 const li = document.createElement('li');
-                li.textContent = item.display_name;
+                li.textContent = label;
                 li.addEventListener('click', function () {
-                  input.value = item.display_name;
+                  input.value = label;
                   hide();
                 });
                 list.appendChild(li);
