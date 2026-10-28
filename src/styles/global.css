@@ -587,6 +587,10 @@ main { padding-top: 82px; }
 }
 
 /* Address autocomplete */
+.autocomplete {
+  position: relative;
+  width: 100%;
+}
 .autocomplete input { width: 100%; }
 .suggest {
   position: absolute;
