@@ -218,7 +218,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
       const simResult = document.getElementById('sim-result');
       if (simForm && simResult) {
         async function geocode(addr) {
-          const url = 'https://photon.komoot.io/api/?q=' + encodeURIComponent(addr) + '&limit=1';
+          const url = 'https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(addr) + '&limit=1';
           const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
           const data = await res.json();
           if (!data || !data.features || !data.features.length) throw new Error('Adresse introuvable : ' + addr);
@@ -265,7 +265,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           if (!q || q.length < 3) { hide(); return; }
           timer = setTimeout(async function () {
             try {
-              const url = 'https://photon.komoot.io/api/?q=' + encodeURIComponent(q) + '&limit=5';
+              const url = 'https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(q) + '&limit=5';
               const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
               const data = await res.json();
               const features = (data && data.features) ? data.features : [];
@@ -273,7 +273,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
               if (!features.length) { hide(); return; }
               features.forEach(function (item) {
                 const props = item.properties || {};
-                const label = [props.name, props.city, props.state, props.country].filter(Boolean).join(', ') || 'Lieu';
+                const label = props.label || 'Lieu';
                 const li = document.createElement('li');
                 li.textContent = label;
                 li.addEventListener('click', function () {
