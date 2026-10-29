@@ -11,4 +11,4 @@ Mes tarifs sont calculés selon le **volume**, le **poids** et la **distance**
 - **Gros volume / charge lourde** : sur devis
 - **Mise à disposition à la demi-journée** : sur devis
 
-Pour un devis personnalisé, contactez-moi : nous répondons sous 48 h
+Pour un devis personnalisé, contactez-moi : réponse sous 48h

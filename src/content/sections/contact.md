@@ -4,7 +4,7 @@ title: "Contact"
 order: 3
 ---
 
-Une question, un devis, une course urgente ? Écrivez-nous ou appelez-nous
+Une course à prévoir ? Écrivez-moi pour en discuter
 
 - 📞 Téléphone : 06 00 00 00 00
 - ✉️ Email : contact@transfastcargo.fr
