@@ -4,12 +4,11 @@ title: "Tarifs"
 order: 2
 ---
 
-Nos tarifs sont calculés selon le **volume**, le **poids** et la **distance**.
+Mes tarifs sont calculés selon le **volume**, le **poids** et la **distance**
 
 - **Enlèvement + livraison locale** : à partir de 25 €
 - **Course express (1 h)** : à partir de 45 €
 - **Gros volume / charge lourde** : sur devis
 - **Mise à disposition à la demi-journée** : sur devis
 
-Pour un devis personnalisé, contactez-nous : nous répondons sous 24 h.
-er.md
+Pour un devis personnalisé, contactez-moi : nous répondons sous 48 h
