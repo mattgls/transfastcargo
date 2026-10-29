@@ -3,7 +3,7 @@ key: prestations
 title: "Prestations"
 order: 0
 ---
-Des livraisons à Paris et en proche banlieue, du pli urgent au colis encombrant. Un service de coursier à vélo cargo, simple, réactif et fiable
+Un colis à livrer, une course urgente ou du matériel à transporter ? Je prends le relais
 
 - **Gros volumes** : meubles, équipements, charges lourdes sur plateau
 - **Objets fragiles** : emballage soigné et arrimage sécurisé
