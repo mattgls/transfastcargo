@@ -681,3 +681,46 @@ main { padding-top: 82px; }
   margin-top: 16px;
   font-size: 1rem;
 }
+
+/* Simulator form polish */
+.sim-card {
+  background: var(--kargo-white);
+  border: 1px solid var(--kargo-black);
+  padding: 28px 28px 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.sim-form {
+  gap: 18px;
+}
+
+.sim-form label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  gap: 6px;
+}
+
+.sim-form input,
+.sim-form select,
+.sim-form textarea {
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid var(--kargo-black);
+  background: var(--kargo-white);
+  color: var(--kargo-black);
+  width: 100%;
+}
+
+.sim-form button.btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.sim-result {
+  padding: 12px;
+  border: 1px dashed var(--kargo-lightgrey);
+  margin-top: 16px;
+  font-size: 15px;
+  text-align: center;
+}
