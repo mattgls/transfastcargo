@@ -4,6 +4,8 @@ title: "Tarifs"
 order: 2
 ---
 
+Plusieurs tarifs possibles pour différentes zones de livraison. Tu ne trouves pas ton bonheur ? Envoie un mail et on en parle.
+
 <p class="tarif-price">Course Classique</p>
 
 plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un carton de vin ou pesant moins de 30 kg)<br>
