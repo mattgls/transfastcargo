@@ -631,5 +631,6 @@ main { padding-top: 82px; }
 }
 
 .prose .tarif-note {
+  display: block;
   margin: 2px 0 1rem 0;
 }
