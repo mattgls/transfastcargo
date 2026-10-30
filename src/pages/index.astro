@@ -83,47 +83,46 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
         </div>
       </div>
       <div class="tarif-cta">
-        <a href="#simulateur" class="hero-cta">Simuler mon tarif</a>
+        <button type="button" class="btn sim-open" id="sim-open">Simuler un tarif</button>
       </div>
     </div>
   </section>
 
-  <section id="simulateur" class="section">
-    <div class="container">
-      <h2 class="section-title">Simulateur de tarif</h2>
+  <div class="sim-modal" id="sim-modal" aria-hidden="true">
+    <div class="sim-card">
+      <button type="button" class="sim-close" aria-label="Fermer">×</button>
+      <h3 class="sim-title">Simulateur de tarif</h3>
       <p class="prose">Décrivez votre colis et obtenez une estimation de prix pour votre envoi.</p>
-      <div class="prose">
-        <form class="contact-form sim-form" id="sim-form">
-          <label>Adresse de départ
-            <div class="autocomplete">
-              <input type="text" name="depart" required placeholder="Ex : 10 rue de Rivoli, Paris" autocomplete="off" />
-              <ul class="suggest" data-for="depart"></ul>
-            </div>
-          </label>
-          <label>Adresse d'arrivée
-            <div class="autocomplete">
-              <input type="text" name="arrivee" required placeholder="Ex : Gare de Lyon, Paris" autocomplete="off" />
-              <ul class="suggest" data-for="arrivee"></ul>
-            </div>
-          </label>
-          <label>Type de tarif
-            <select name="type">
-              <option value="normal">Normal</option>
-              <option value="cargo">Cargo</option>
-            </select>
-          </label>
-          <label>Option express (1 h)
-            <select name="express">
-              <option value="non">Non</option>
-              <option value="oui">Oui</option>
-            </select>
-          </label>
-          <button type="submit" class="btn">Simuler le tarif</button>
-        </form>
-        <div id="sim-result" class="sim-result"></div>
-      </div>
+      <form class="contact-form sim-form" id="sim-form">
+        <label>Adresse de départ
+          <div class="autocomplete">
+            <input type="text" name="depart" required placeholder="Ex : 10 rue de Rivoli, Paris" autocomplete="off" />
+            <ul class="suggest" data-for="depart"></ul>
+          </div>
+        </label>
+        <label>Adresse d'arrivée
+          <div class="autocomplete">
+            <input type="text" name="arrivee" required placeholder="Ex : Gare de Lyon, Paris" autocomplete="off" />
+            <ul class="suggest" data-for="arrivee"></ul>
+          </div>
+        </label>
+        <label>Type de tarif
+          <select name="type">
+            <option value="normal">Normal</option>
+            <option value="cargo">Cargo</option>
+          </select>
+        </label>
+        <label>Option express (1 h)
+          <select name="express">
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+          </select>
+        </label>
+        <button type="submit" class="btn">Simuler le tarif</button>
+      </form>
+      <div id="sim-result" class="sim-result"></div>
     </div>
-  </section>
+  </div>
 
   <section id="contact" class="section section--alt">
     <div class="container">
@@ -209,6 +208,28 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           p.addEventListener('mouseleave', function () {
             tooltip.style.display = 'none';
           });
+        });
+      }
+
+
+      // Tariff simulator modal
+      const simOpen = document.getElementById('sim-open');
+      const simModal = document.getElementById('sim-modal');
+      const openSim = function () {
+        if (simModal) { simModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+      };
+      const closeSim = function () {
+        if (simModal) { simModal.style.display = 'none'; document.body.style.overflow = ''; }
+      };
+      if (simOpen) simOpen.addEventListener('click', openSim);
+      if (simModal) {
+        const closer = simModal.querySelector('.sim-close');
+        if (closer) closer.addEventListener('click', closeSim);
+        simModal.addEventListener('click', function (e) {
+          if (e.target === simModal) closeSim();
+        });
+        window.addEventListener('keydown', function (e) {
+          if (simModal.style.display === 'flex' && e.key === 'Escape') closeSim();
         });
       }
 
