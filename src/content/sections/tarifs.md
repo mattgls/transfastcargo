@@ -8,12 +8,12 @@ Plusieurs tarifs possibles pour différentes zones de livraison. Tu ne trouves p
 
 <p class="tarif-price">Course Classique</p>
 
-plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un carton de vin ou pesant moins de 30 kg)<br>
+Plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un carton de vin ou pesant moins de 30 kg)<br>
 <strong class="tarif-note">à partir de 30 € HT</strong>
 
 <p class="tarif-price">Course Cargo</p>
 
-marchandises de plus de 30 kg ou présentant un encombrement important<br>
+Marchandises de plus de 30 kg ou présentant un encombrement important<br>
 <strong class="tarif-note">à partir de 50 € HT</strong>
 
 <p class="tarif-price">Course Urgente 1 h</p>
