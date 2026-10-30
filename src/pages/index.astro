@@ -303,16 +303,31 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           const arrivee = simForm.arrivee.value.trim();
           const type = simForm.type.value;
           const express = simForm.express.value === 'oui';
-          const base = (type === 'cargo') ? 50 : 30;
-          const surcharge = express ? (type === 'cargo' ? 20 : 15) : 0;
           try {
             const a = await geocode(depart);
             const b = await geocode(arrivee);
             const km = haversine(a, b);
-            const price = Math.max(base, base + km * 1.2 + surcharge);
+            const bands = [
+              { max:5, c:30, g:50 },
+              { max:8, c:35, g:55 },
+              { max:11, c:40, g:60 },
+              { max:14, c:45, g:65 },
+              { max:17, c:50, g:70 },
+              { max:20, c:55, g:75 }
+            ];
+            let base = null;
+            for (let i = 0; i < bands.length; i++) {
+              if (km <= bands[i].max) { base = (type === 'cargo') ? bands[i].g : bands[i].c; break; }
+            }
+            const surcharge = express ? (type === 'cargo' ? 20 : 15) : 0;
             const labelType = (type === 'cargo') ? 'Cargo' : 'Classique';
             const labelExp = express ? ' (+ express 1 h)' : '';
-            simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif ' + labelType + labelExp + ' estimé : <strong>' + price.toFixed(2) + ' €</strong>';
+            if (base === null) {
+              simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif ' + labelType + ' : <strong>sur devis</strong> (distance &gt; 20 km)';
+            } else {
+              const price = base + surcharge;
+              simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif ' + labelType + labelExp + ' estimé : <strong>' + price.toFixed(0) + ' €</strong>';
+            }
           } catch (err) {
             simResult.textContent = (err && err.message) ? err.message : 'Erreur lors du calcul.';
           }
