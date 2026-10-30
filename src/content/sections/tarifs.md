@@ -12,13 +12,13 @@ plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un cart
 
 marchandises de plus de 30 kg ou présentant un encombrement important
 
-<p class="tarif-price">Course Urgence 1 h</p>
+<p class="tarif-price">Course Urgente 1 h</p>
 
 +15 € HT en classique / +20 € HT en cargo
 
-<p class="tarif-price">Prestations sur étude</p>
+<p class="tarif-price">Prestations sur devis</p>
 
-- Course avec plusieurs points de ramassage
+- Course avec plusieurs points de ramassage ou dépose
 - Livraison en petite couronne
 - Chargements dépassant 1,50 m de longueur ou 60 kg
 - Toute prestation non listée peut faire l'objet d'une étude
