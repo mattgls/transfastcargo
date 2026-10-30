@@ -270,7 +270,7 @@ main { padding-top: 82px; }
 }
 
 .prose p { margin-bottom: 1.25rem; }
-.prose ul { padding-left: 1.25rem; margin-bottom: 1.25rem; }
+.prose ul { padding-left: 1.25rem; margin-bottom: 1.25rem; margin-top: 0; }
 .prose li { margin-bottom: 0.5rem; list-style: disc; }
 .prose strong { font-weight: 700; }
 
@@ -625,3 +625,7 @@ main { padding-top: 82px; }
 }
 
 #tarifs .section-title { margin-bottom: 24px; }
+
+.prose .tarif-price.tarif-price-tight {
+  margin-bottom: 2px;
+}
