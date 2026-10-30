@@ -121,6 +121,7 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
         <button type="submit" class="btn">Simuler le tarif</button>
       </form>
       <div id="sim-result" class="sim-result"></div>
+      <a id="sim-request" class="btn" style="display:none; margin-top:1rem;" href="#">Faire une demande</a>
     </div>
   </div>
 
@@ -322,13 +323,26 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
             const surcharge = express ? (type === 'cargo' ? 20 : 15) : 0;
             const labelType = (type === 'cargo') ? 'Cargo' : 'Classique';
             const labelExp = express ? ' (+ express 1 h)' : '';
+            const reqBtn = document.getElementById('sim-request');
             if (base === null) {
               simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif ' + labelType + ' : <strong>sur devis</strong> (distance &gt; 20 km)';
+              if (reqBtn) {
+                const body = 'Adresse de départ : ' + depart + '\nAdresse d\'arrivée : ' + arrivee + '\nType de tarif : ' + labelType + '\nOption express : ' + (express ? 'Oui' : 'Non') + '\nDistance estimée : ' + km.toFixed(1) + ' km\nTarif estimé : sur devis (distance > 20 km)';
+                reqBtn.href = 'mailto:contact@transfastcargo.fr?subject=' + encodeURIComponent('Demande de transport - TransFastCargo') + '&body=' + encodeURIComponent(body);
+                reqBtn.style.display = 'inline-block';
+              }
             } else {
               const price = base + surcharge;
               simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif ' + labelType + labelExp + ' estimé : <strong>' + price.toFixed(0) + ' €</strong>';
+              if (reqBtn) {
+                const body = 'Adresse de départ : ' + depart + '\nAdresse d\'arrivée : ' + arrivee + '\nType de tarif : ' + labelType + '\nOption express : ' + (express ? 'Oui' : 'Non') + '\nDistance estimée : ' + km.toFixed(1) + ' km\nTarif estimé : ' + price.toFixed(0) + ' €';
+                reqBtn.href = 'mailto:contact@transfastcargo.fr?subject=' + encodeURIComponent('Demande de transport - TransFastCargo') + '&body=' + encodeURIComponent(body);
+                reqBtn.style.display = 'inline-block';
+              }
             }
           } catch (err) {
+            const reqBtn = document.getElementById('sim-request');
+            if (reqBtn) reqBtn.style.display = 'none';
             simResult.textContent = (err && err.message) ? err.message : 'Erreur lors du calcul.';
           }
         });

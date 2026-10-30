@@ -136,6 +136,7 @@ button,
 .hero-cta,
 .sim-form button {
   font-family: "Ethnocentric", system-ui, sans-serif !important;
+  cursor: pointer;
 }
 
 main { padding-top: 82px; }
@@ -632,7 +633,7 @@ main { padding-top: 82px; }
 
 .prose .tarif-note {
   display: block;
-  margin: 2px 0 1rem 0;
+  margin: 0 0 1rem 0;
 }
 
 /* Tariff simulator modal */
