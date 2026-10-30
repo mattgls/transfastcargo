@@ -103,14 +103,17 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
               <ul class="suggest" data-for="arrivee"></ul>
             </div>
           </label>
-          <label>Poids (kg)
-            <input type="number" name="poids" min="0" step="1" value="10" />
+          <label>Type de tarif
+            <select name="type">
+              <option value="normal">Normal</option>
+              <option value="cargo">Cargo</option>
+            </select>
           </label>
-          <label>Dimensions (largeur*longueur*profondeur)
-            <input type="text" name="dimensions" placeholder="ex: 120*80*60 cm" />
-          </label>
-          <label>Description
-            <textarea name="description" rows="3" placeholder="Décrivez le colis..."></textarea>
+          <label>Option express (1 h)
+            <select name="express">
+              <option value="non">Non</option>
+              <option value="oui">Oui</option>
+            </select>
           </label>
           <button type="submit" class="btn">Simuler le tarif</button>
         </form>
@@ -243,13 +246,18 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           simResult.textContent = 'Calcul en cours...';
           const depart = simForm.depart.value.trim();
           const arrivee = simForm.arrivee.value.trim();
-          const poids = parseFloat(simForm.poids.value) || 0;
+          const type = simForm.type.value;
+          const express = simForm.express.value === 'oui';
+          const base = (type === 'cargo') ? 50 : 30;
+          const surcharge = express ? (type === 'cargo' ? 20 : 15) : 0;
           try {
             const a = await geocode(depart);
             const b = await geocode(arrivee);
             const km = haversine(a, b);
-            const price = Math.max(25, 25 + km * 1.2 + poids * 0.5);
-            simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif estimé : <strong>' + price.toFixed(2) + ' €</strong>';
+            const price = Math.max(base, base + km * 1.2 + surcharge);
+            const labelType = (type === 'cargo') ? 'Cargo' : 'Classique';
+            const labelExp = express ? ' (+ express 1 h)' : '';
+            simResult.innerHTML = 'Distance approx. <strong>' + km.toFixed(1) + ' km</strong> — Tarif ' + labelType + labelExp + ' estimé : <strong>' + price.toFixed(2) + ' €</strong>';
           } catch (err) {
             simResult.textContent = (err && err.message) ? err.message : 'Erreur lors du calcul.';
           }

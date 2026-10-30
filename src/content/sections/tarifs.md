@@ -4,11 +4,14 @@ title: "Tarifs"
 order: 2
 ---
 
-- **Course Classique : à partir de 30 € HT**  
-  plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un carton de vin ou pesant moins de 30 kg)
-- **Course Cargo : à partir de 50 € HT**  
-  marchandises de plus de 30 kg ou présentant un encombrement important
-- **Course Urgence 1 h** : +15 € HT en classique / +20 € HT en cargo
+<p class="tarif-price">Course Classique : à partir de 30 € HT</p>
+plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un carton de vin ou pesant moins de 30 kg)
+
+<p class="tarif-price">Course Cargo : à partir de 50 € HT</p>
+marchandises de plus de 30 kg ou présentant un encombrement important
+
+<p class="tarif-price">Course Urgence 1 h</p>
++15 € HT en classique / +20 € HT en cargo
 
 **Prestations sur étude :**
 
