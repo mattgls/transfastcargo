@@ -22,5 +22,3 @@ marchandises de plus de 30 kg ou présentant un encombrement important
 - Livraison en petite couronne
 - Chargements dépassant 1,50 m de longueur ou 60 kg
 - Toute prestation non listée peut faire l'objet d'une étude
-
-Devis sur demande : contact@transfastcargo.fr

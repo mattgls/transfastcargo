@@ -621,5 +621,7 @@ main { padding-top: 82px; }
 /* Tarif price lines */
 .prose .tarif-price {
   font-family: "Ethnocentric", system-ui, sans-serif;
-  margin: 16px 0 8px 0;
+  margin: 16px 0 4px 0;
 }
+
+#tarifs .section-title { margin-bottom: 24px; }
