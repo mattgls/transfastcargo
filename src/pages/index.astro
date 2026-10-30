@@ -82,6 +82,9 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           </div>
         </div>
       </div>
+      <div class="tarif-cta">
+        <a href="#simulateur" class="hero-cta">Simuler mon tarif</a>
+      </div>
     </div>
   </section>
 
@@ -192,15 +195,6 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
       const mapWrap = document.getElementById('map-wrap');
       const tooltip = document.getElementById('map-tooltip');
       if (mapWrap && tooltip) {
-        const arrNames = {
-          'arr01':'1er arrondissement','arr02':'2e arrondissement','arr03':'3e arrondissement',
-          'arr04':'4e arrondissement','arr05':'5e arrondissement','arr06':'6e arrondissement',
-          'arr07':'7e arrondissement','arr08':'8e arrondissement','arr09':'9e arrondissement',
-          'arr10':'10e arrondissement','arr11':'11e arrondissement','arr12':'12e arrondissement',
-          'arr13':'13e arrondissement','arr14':'14e arrondissement','arr15':'15e arrondissement',
-          'arr16':'16e arrondissement','arr17':'17e arrondissement','arr18':'18e arrondissement',
-          'arr19':'19e arrondissement','arr20':'20e arrondissement'
-        };
         const paths = mapWrap.querySelectorAll('.arrondissement, .commune');
         paths.forEach(function (p) {
           const name = p.getAttribute('data-name') || 'Zone';
@@ -216,11 +210,51 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
             tooltip.style.display = 'none';
           });
         });
-
-        // Communes and arrondissements already present in SVG; no client labels.
       }
 
-      // Tariff simulator
+      // Address autocomplete
+      function setupAutocomplete(input) {
+        const list = input.parentElement.querySelector('.suggest');
+        if (!list) return;
+        let timer = null;
+        let suppressInput = false;
+        const hide = function () { list.style.display = 'none'; list.innerHTML = ''; };
+        const search = function (q) {
+          if (timer) clearTimeout(timer);
+          if (!q || q.length < 2) { hide(); return; }
+          timer = setTimeout(async function () {
+            try {
+              const url = 'https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(q) + '&limit=5';
+              const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+              const data = await res.json();
+              const features = (data && data.features) ? data.features : [];
+              list.innerHTML = '';
+              if (!features.length) { hide(); return; }
+              features.forEach(function (item) {
+                const props = item.properties || {};
+                const label = props.label || 'Lieu';
+                const li = document.createElement('li');
+                li.textContent = label;
+                li.addEventListener('click', function () {
+                  suppressInput = true;
+                  input.value = label;
+                  hide();
+                  setTimeout(function () { suppressInput = false; }, 400);
+                });
+                list.appendChild(li);
+              });
+              list.style.display = 'block';
+            } catch (e) { hide(); }
+          }, 300);
+        };
+        input.addEventListener('input', function () { if (suppressInput) return; search(input.value.trim()); });
+        input.addEventListener('blur', function () { setTimeout(hide, 200); });
+        input.addEventListener('focus', function () { if (suppressInput) return; if (input.value.trim().length >= 2) search(input.value.trim()); });
+      }
+      setupAutocomplete(document.querySelector('input[name="depart"]'));
+      setupAutocomplete(document.querySelector('input[name="arrivee"]'));
+
+      // Simulator calc
       const simForm = document.getElementById('sim-form');
       const simResult = document.getElementById('sim-result');
       if (simForm && simResult) {
@@ -263,50 +297,6 @@ const mapSvg = fs.readFileSync('public/paris-map.svg', 'utf-8').replace(/<\?xml[
           }
         });
       }
-
-
-      // Address autocomplete (OpenStreetMap / Nominatim)
-      function setupAutocomplete(input) {
-        const list = input.parentElement.querySelector('.suggest');
-        if (!list) return;
-        let timer = null;
-        let suppressInput = false;
-        const hide = function () { list.style.display = 'none'; list.innerHTML = ''; };
-        const search = function (q) {
-          if (timer) clearTimeout(timer);
-          if (!q || q.length < 2) { hide(); return; }
-          timer = setTimeout(async function () {
-            try {
-              const url = 'https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(q) + '&limit=5';
-              const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-              const data = await res.json();
-              const features = (data && data.features) ? data.features : [];
-              list.innerHTML = '';
-              if (!features.length) { hide(); return; }
-              features.forEach(function (item) {
-                const props = item.properties || {};
-                const label = props.label || 'Lieu';
-                const li = document.createElement('li');
-                li.textContent = label;
-                li.addEventListener('click', function () {
-                  suppressInput = true;
-                  input.value = label;
-                  hide();
-                  setTimeout(function () { suppressInput = false; }, 400);
-                });
-                list.appendChild(li);
-              });
-              list.style.display = 'block';
-            } catch (e) { hide(); console.error(e); simResult.textContent = 'Autocomplete erreur: ' + e; }
-          }, 300);
-        };
-        input.addEventListener('input', function () { if (suppressInput) return; search(input.value.trim()); });
-        input.addEventListener('blur', function () { setTimeout(hide, 200); });
-        input.addEventListener('focus', function () { if (suppressInput) return; if (input.value.trim().length >= 2) search(input.value.trim()); });
-      }
-      setupAutocomplete(document.querySelector('input[name="depart"]'));
-      setupAutocomplete(document.querySelector('input[name="arrivee"]'));
-
     })();
   </script>
 </BaseLayout>
