@@ -4,11 +4,17 @@ title: "Tarifs"
 order: 2
 ---
 
-Mes tarifs sont calculés selon le **volume**, le **poids** et la **distance**
+- **course Classique : à partir de 30 € HT**
+  plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un carton de vin ou pesant moins de 30 kg)
+- **course Cargo : à partir de 50 € HT**
+  marchandises de plus de 30 kg ou présentant un encombrement important
+- **course Urgence 1 h** : +15 € HT en classique / +20 € HT en cargo
 
-- **Enlèvement + livraison locale** : à partir de 25 €
-- **Course express (1 h)** : à partir de 45 €
-- **Gros volume / charge lourde** : sur devis
-- **Mise à disposition à la demi-journée** : sur devis
+**Prestations sur étude :**
 
-Pour un devis personnalisé, contactez-moi : réponse sous 48h
+- Course avec plusieurs points de ramassage
+- Livraison en petite couronne
+- Chargements dépassant 1,50 m de longueur ou 60 kg
+
+Toute prestation non listée peut faire l’objet d’une étude
+Devis sur demande : contact@transfastcargo.fr
