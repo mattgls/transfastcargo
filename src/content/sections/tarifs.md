@@ -8,13 +8,13 @@ order: 2
 
 plis, petits colis, clés et objets compacts (contenu pouvant tenir dans un carton de vin ou pesant moins de 30 kg)
 
-à partir de 30 € HT
+<p class="tarif-note">à partir de 30 € HT</p>
 
 <p class="tarif-price">Course Cargo</p>
 
 marchandises de plus de 30 kg ou présentant un encombrement important
 
-à partir de 50 € HT
+<p class="tarif-note">à partir de 50 € HT</p>
 
 <p class="tarif-price">Course Urgente 1 h</p>
 

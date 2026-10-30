@@ -629,3 +629,7 @@ main { padding-top: 82px; }
 .prose .tarif-price.tarif-price-tight {
   margin-bottom: 2px;
 }
+
+.prose .tarif-note {
+  margin: 2px 0 1rem 0;
+}
